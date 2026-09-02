@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/RAFAELDCOELHO/rfbcalc/actions/workflows/ci.yml/badge.svg)](https://github.com/RAFAELDCOELHO/rfbcalc/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/rfbcalc.svg)](https://pypi.org/project/rfbcalc/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 
 <p align="center">
@@ -46,7 +47,7 @@ O que a biblioteca **não** faz: calcular tributo. Todo número vem do motor ofi
 ### Instalação
 
 ```bash
-pip install rfbcalc          # a partir do PyPI (quando publicado)
+pip install rfbcalc          # a partir do PyPI
 pip install -e '.[dev]'      # a partir do repositório
 ```
 
@@ -213,7 +214,7 @@ official engine.
 ### Install
 
 ```bash
-pip install rfbcalc          # from PyPI (once published)
+pip install rfbcalc          # from PyPI
 pip install -e '.[dev]'      # from a clone of this repository
 ```
 
