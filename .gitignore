@@ -10,3 +10,4 @@ dist/
 .ruff_cache/
 .coverage
 offline-motor/
+.DS_Store

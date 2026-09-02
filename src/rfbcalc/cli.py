@@ -12,6 +12,7 @@ import argparse
 import json
 import sys
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -42,7 +43,7 @@ def _parse_campos(pairs: list[str]) -> dict[str, Any]:
 
 
 def _load_json(source: str) -> Any:
-    text = sys.stdin.read() if source == "-" else open(source, encoding="utf-8").read()
+    text = sys.stdin.read() if source == "-" else Path(source).read_text(encoding="utf-8")
     return json.loads(text, parse_float=Decimal)
 
 
