@@ -205,7 +205,8 @@ official engine.
 ### Install
 
 ```bash
-pip install rfbcalc
+pip install rfbcalc          # from PyPI (once published)
+pip install -e '.[dev]'      # from a clone of this repository
 ```
 
 Python 3.11+.
