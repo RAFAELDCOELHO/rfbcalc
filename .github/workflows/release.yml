@@ -22,7 +22,7 @@ jobs:
         run: |
           pkg=$(ls dist/*.whl | sed -E 's/.*rfbcalc-([^-]+)-.*/\1/')
           [ "v$pkg" = "${GITHUB_REF_NAME}" ] || { echo "tag ${GITHUB_REF_NAME} != package v$pkg"; exit 1; }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
