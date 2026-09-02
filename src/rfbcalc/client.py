@@ -98,11 +98,6 @@ class Calculator:
             raise RfbCalcError(response.status_code, problem, url)
         return body
 
-    @staticmethod
-    def _clean(payload: dict[str, Any]) -> dict[str, Any]:
-        """Drop unset optionals so the motor applies its own defaults."""
-        return {k: v for k, v in payload.items() if v is not None}
-
     # -- official endpoints ----------------------------------------------
     def base_calculo_cbs_ibs(self, **campos: Any) -> BaseCalculoOutput:
         """CBS/IBS calculation base for goods.
@@ -112,7 +107,8 @@ class Calculator:
         payload = BaseCalculoCibsInput(**campos)
         body = self._post(
             "/calculadora/base-calculo/cbs-ibs-mercadorias",
-            self._clean(payload.model_dump(mode="json", exclude_none=True)),
+            # exclude_none: omitted amounts are not sent, so the motor applies its own defaults
+            payload.model_dump(mode="json", exclude_none=True),
         )
         return BaseCalculoOutput.model_validate(body)
 
@@ -124,7 +120,8 @@ class Calculator:
         payload = BaseCalculoIsInput(**campos)
         body = self._post(
             "/calculadora/base-calculo/is-mercadorias",
-            self._clean(payload.model_dump(mode="json", exclude_none=True)),
+            # exclude_none: omitted amounts are not sent, so the motor applies its own defaults
+            payload.model_dump(mode="json", exclude_none=True),
         )
         return BaseCalculoOutput.model_validate(body)
 

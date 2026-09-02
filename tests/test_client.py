@@ -5,6 +5,7 @@ not assert any tax rule: the expected numbers come from the official motor, neve
 a calculation performed here.
 """
 
+import json
 from decimal import Decimal
 
 import httpx
@@ -67,8 +68,6 @@ def test_request_payload_uses_official_field_names(cases):
         )
         with Calculator() as calc:
             calc.base_calculo_cbs_ibs(**case["request"])
-    import json
-
     sent = json.loads(route.calls[0].request.content)
     assert set(sent) == set(case["request"])
     assert Decimal(str(sent["valorBem"])) == Decimal(str(case["request"]["valorBem"]))
@@ -82,8 +81,6 @@ def test_unset_optional_fields_are_not_sent():
         )
         with Calculator() as calc:
             calc.base_calculo_cbs_ibs(anoFatoGerador=2026, valorBem="10.00")
-    import json
-
     sent = json.loads(route.calls[0].request.content)
     assert sent == {"anoFatoGerador": 2026, "valorBem": "10.00"}
 
@@ -189,12 +186,52 @@ def test_cli_surfaces_official_error(cases, capsys):
 
 
 def test_cli_prints_official_result(cases, capsys):
-    import json as _json
-
     from rfbcalc.cli import main
 
     case = cases["base_calculo_cbs_ibs"]
     with _mock(case["endpoint"], case):
         assert main(["base-calculo-cbs-ibs", "anoFatoGerador=2026", "valorBem=1000.00"]) == 0
-    printed = _json.loads(capsys.readouterr().out)
+    printed = json.loads(capsys.readouterr().out)
     assert Decimal(printed["baseCalculo"]) == Decimal(case["response"]["baseCalculo"])
+
+
+def test_cli_reads_regime_geral_payload_from_stdin(cases, monkeypatch, capsys):
+    import io
+
+    from rfbcalc.cli import main
+
+    case = cases["regime_geral"]
+    monkeypatch.setattr("sys.stdin", io.StringIO(json.dumps(case["request"])))
+    with _mock(case["endpoint"], case):
+        assert main(["regime-geral", "-"]) == 0
+    printed = json.loads(capsys.readouterr().out)
+    expected = case["response"]["total"]["tribCalc"]["IBSCBSTot"]["gCBS"]["vCBS"]
+    assert Decimal(printed["total"]["tribCalc"]["IBSCBSTot"]["gCBS"]["vCBS"]) == Decimal(expected)
+
+
+def test_cli_rejects_invalid_json_without_a_traceback(tmp_path, capsys):
+    from rfbcalc.cli import main
+
+    bad = tmp_path / "op.json"
+    bad.write_text("{not json", encoding="utf-8")
+    assert main(["regime-geral", str(bad)]) == 2
+    assert "JSON invalido" in capsys.readouterr().err
+
+
+def test_cli_reports_unreachable_motor(capsys):
+    from rfbcalc.cli import main
+
+    with respx.mock(base_url=ONLINE_BASE_URL) as router:
+        router.get("/calculadora/dados-abertos/versao").mock(
+            side_effect=httpx.ConnectError("refused")
+        )
+        assert main(["versao"]) == 1
+    assert "erro ao acessar o motor oficial" in capsys.readouterr().err
+
+
+def test_version_is_single_sourced():
+    from importlib.metadata import version
+
+    import rfbcalc
+
+    assert rfbcalc.__version__ == version("rfbcalc")

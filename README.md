@@ -50,7 +50,7 @@ pip install rfbcalc          # a partir do PyPI (quando publicado)
 pip install -e '.[dev]'      # a partir do repositório
 ```
 
-Requer Python 3.11+.
+Requer Python 3.11+. O pacote é tipado (`py.typed`).
 
 ### Uso
 
@@ -191,6 +191,10 @@ Os testes de CI não acessam a rede: as respostas oficiais são reproduzidas com
 `respx` a partir do fixture gravado. Assim o CI não depende de um serviço do governo
 estar no ar, mas os números continuam sendo os oficiais.
 
+Release: atualize `__version__` em `src/rfbcalc/__init__.py` e o
+[`CHANGELOG.md`](CHANGELOG.md), crie a tag `vX.Y.Z` e faça push. O workflow
+`release.yml` constrói e publica no PyPI (trusted publishing, sem token no repositório).
+
 ---
 
 ## English
@@ -213,7 +217,7 @@ pip install rfbcalc          # from PyPI (once published)
 pip install -e '.[dev]'      # from a clone of this repository
 ```
 
-Python 3.11+.
+Python 3.11+. Ships `py.typed`.
 
 ### Quickstart
 

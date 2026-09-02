@@ -1,7 +1,7 @@
 """`make demo`: calls the official RFB motor live and checks it against a recorded result.
 
 The expected numbers are NOT written by hand. They live in
-``tests/fixtures/official_responses.json``, recorded verbatim from the official motor
+``src/rfbcalc/fixtures/official_responses.json``, recorded verbatim from the official motor
 (see ``make record-fixtures``). The demo replays the same inputs against the live motor
 and fails if any value moves by even one centavo.
 """
