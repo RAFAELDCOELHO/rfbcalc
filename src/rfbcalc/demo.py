@@ -111,6 +111,27 @@ def main(argv: list[str] | None = None) -> int:
                 _centavos(expected_total["gCBS"]["vCBS"]),
                 _centavos(result.vCBS),
             )
+
+            # --- regime geral: the Receita's own published example payload ---
+            case = recorded["regime_geral_exemplo_oficial"]
+            result = calc.regime_geral(case["request"])
+            expected = case["response"]["total"]["tribCalc"]
+            print("\nRegime geral - exemplo publicado pela propria Receita")
+            print("    (scripts-python-exemplo.zip / input/entrada-regime-geral.json)")
+            print(f"    {'=> vBC (base)':<24} R$ {_centavos(result.vBC)}")
+            print(f"    {'=> vIBS':<24} R$ {_centavos(result.vIBS)}")
+            print(f"    {'=> vCBS':<24} R$ {_centavos(result.vCBS)}")
+            print(f"    {'=> vIS':<24} R$ {_centavos(result.vIS)}")
+            failures += _check(
+                "regime_geral_exemplo_oficial.vBCIBSCBS",
+                _centavos(expected["IBSCBSTot"]["vBCIBSCBS"]),
+                _centavos(result.vBC),
+            )
+            failures += _check(
+                "regime_geral_exemplo_oficial.vIS",
+                _centavos(expected["ISTot"]["vIS"]),
+                _centavos(result.vIS),
+            )
     except RfbCalcError as exc:
         print(f"\nFAIL: official motor rejected the request: {exc}", file=sys.stderr)
         return 1

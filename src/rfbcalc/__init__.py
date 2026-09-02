@@ -15,6 +15,7 @@ from .models import (
     ItemOperacaoInput,
     OperacaoInput,
     RegimeGeralOutput,
+    TributacaoRegularInput,
     Versao,
 )
 
@@ -33,6 +34,7 @@ __all__ = [
     "ItemOperacaoInput",
     "OperacaoInput",
     "RegimeGeralOutput",
+    "TributacaoRegularInput",
     "Versao",
     "__version__",
 ]

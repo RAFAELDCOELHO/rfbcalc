@@ -57,6 +57,41 @@ CASES: list[tuple[str, str, dict[str, Any]]] = [
             "descontoIncondicional": "30.00",
         },
     ),
+    # The Receita's own published example payload, shipped inside
+    # scripts-python-exemplo.zip with the official offline calculator
+    # (input/entrada-regime-geral.json). Exercises Imposto Seletivo and
+    # tributacaoRegular on a differentiated item.
+    (
+        "regime_geral_exemplo_oficial",
+        "/calculadora/regime-geral",
+        {
+            "id": "507f1f77bcf86cd799439011",
+            "versao": "1.0.0",
+            "dataHoraEmissao": "2027-01-01T03:00:00-03:00",
+            "municipio": 4314902,
+            "uf": "RS",
+            "itens": [
+                {
+                    "numero": 1,
+                    "ncm": "24021000",
+                    "quantidade": 222,
+                    "unidade": "VN",
+                    "cst": "550",
+                    "baseCalculo": 1111,
+                    "cClassTrib": "550020",
+                    "tributacaoRegular": {"cst": "200", "cClassTrib": "200032"},
+                    "impostoSeletivo": {
+                        "cst": "000",
+                        "baseCalculo": 1111,
+                        "cClassTrib": "000001",
+                        "unidade": "VN",
+                        "quantidade": 222,
+                        "impostoInformado": 0,
+                    },
+                }
+            ],
+        },
+    ),
     (
         "regime_geral",
         "/calculadora/regime-geral",

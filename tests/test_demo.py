@@ -16,13 +16,36 @@ from rfbcalc.client import ONLINE_BASE_URL
 
 
 def _routes(router: respx.Router, cases: dict, overrides: dict | None = None) -> None:
+    """Mock every recorded endpoint.
+
+    Two cases share /calculadora/regime-geral, so that route dispatches on the
+    operation `id` in the request body instead of being registered twice.
+    """
     overrides = overrides or {}
+
+    def body_for(name: str) -> dict:
+        return overrides.get(name, cases[name]["response"])
+
     router.get("/calculadora/dados-abertos/versao").mock(
         return_value=httpx.Response(200, json={"versaoApp": "1.3.1", "versaoDb": "V0043"})
     )
+
+    by_endpoint: dict[str, list[str]] = {}
     for name, case in cases.items():
-        body = overrides.get(name, case["response"])
-        router.post(case["endpoint"]).mock(return_value=httpx.Response(200, json=body))
+        by_endpoint.setdefault(case["endpoint"], []).append(name)
+
+    for endpoint, names in by_endpoint.items():
+        if len(names) == 1:
+            router.post(endpoint).mock(return_value=httpx.Response(200, json=body_for(names[0])))
+            continue
+
+        by_id = {cases[n]["request"]["id"]: n for n in names}
+
+        def dispatch(request: httpx.Request, _by_id: dict = by_id) -> httpx.Response:
+            sent_id = json.loads(request.content)["id"]
+            return httpx.Response(200, json=body_for(_by_id[sent_id]))
+
+        router.post(endpoint).mock(side_effect=dispatch)
 
 
 def test_demo_passes_when_motor_matches_the_recording(cases, capsys):
@@ -44,6 +67,18 @@ def test_demo_fails_when_motor_is_off_by_one_centavo(cases, capsys):
     assert "base_calculo_cbs_ibs.baseCalculo" in err
 
 
+def test_demo_fails_when_imposto_seletivo_drifts(cases, capsys):
+    """The Imposto Seletivo total is checked too, not just CBS/IBS."""
+    case = cases["regime_geral_exemplo_oficial"]
+    drifted = json.loads(json.dumps(case["response"]))
+    original = Decimal(drifted["total"]["tribCalc"]["ISTot"]["vIS"])
+    drifted["total"]["tribCalc"]["ISTot"]["vIS"] = str(original + Decimal("0.01"))
+    with respx.mock(base_url=ONLINE_BASE_URL) as router:
+        _routes(router, cases, overrides={"regime_geral_exemplo_oficial": drifted})
+        assert demo.main([]) == 1
+    assert "regime_geral_exemplo_oficial.vIS" in capsys.readouterr().err
+
+
 def test_demo_reports_unreachable_motor(capsys):
     with respx.mock(base_url=ONLINE_BASE_URL) as router:
         router.get("/calculadora/dados-abertos/versao").mock(
@@ -62,7 +97,10 @@ def test_demo_offline_flag_targets_the_local_motor(capsys):
     assert "localhost:8080" in capsys.readouterr().out
 
 
-@pytest.mark.parametrize("name", ["base_calculo_cbs_ibs", "base_calculo_is", "regime_geral"])
+@pytest.mark.parametrize(
+    "name",
+    ["base_calculo_cbs_ibs", "base_calculo_is", "regime_geral", "regime_geral_exemplo_oficial"],
+)
 def test_fixture_records_provenance(official, name):
     """Every expected number must be traceable to a recorded official response."""
     case = official["cases"][name]

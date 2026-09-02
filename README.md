@@ -142,26 +142,25 @@ O motor online é o padrão. A Receita também publica uma
 que expõe **a mesma API** em `http://localhost:8080/api`.
 
 ```bash
-make offline-start      # baixa, descompacta e sobe o motor oficial offline (Java 21+)
-make demo-offline       # sobe o motor, roda a demo contra ele e derruba no fim
+make demo-offline       # baixa, sobe o motor oficial offline, roda a demo e derruba no fim
+make offline-start      # apenas sobe o motor
 make offline-stop
 ```
 
-O alvo `offline-start` usa a opção oficial de **Java 21**, exatamente como documentado
-pela Receita:
+Requer **Docker**. O pacote oficial (`calculadora.zip`) não contém um `.jar` solto: ele
+traz `calculadora.tar.gz`, uma imagem de contêiner com o `api-regime-geral.jar` dentro.
+Por isso o `make offline-start` segue exatamente o caminho oficial documentado pela
+Receita (`linux/1-instalar.sh` e `linux/2-executar.sh` do próprio pacote):
 
 ```bash
-java -jar api-regime-geral.jar --spring.profiles.active=offline
+docker import ./calculadora.tar.gz calculadora-image
+docker run -t -i --rm -p 8080:8080 -p 8081:8081 -p 80:80 \
+  -w /calculadora --name calculadora-container calculadora-image bash start.sh
 ```
 
-Alternativa oficial via **Docker** (também documentada pela Receita; o
-`calculadora.tar.gz` está dentro do `calculadora.zip` baixado):
-
-```bash
-docker import ./calculadora.tar.gz calculadora:latest
-docker run -t -i --rm -p 8080:8080 -p 8081:8081 -p 9091:9091 -p 9092:9092 \
-  -w /calculadora calculadora bash start.sh
-```
+O `make offline-start` publica apenas 8080 e 8081; a porta 80 (portal web) exige
+privilégios que a demo não precisa. O download é de ~250 MB e vem do endereço
+publicado pela própria Receita.
 
 Em Python, basta apontar o cliente para o motor local:
 
@@ -172,7 +171,8 @@ with Calculator.offline() as calc:               # http://localhost:8080/api
     calc.base_calculo_cbs_ibs(anoFatoGerador=2026, valorBem="1000.00")
 ```
 
-O download é grande (~250 MB) e vem do endereço publicado pela própria Receita.
+Os motores online e offline foram verificados lado a lado: para os casos da demo eles
+devolvem **exatamente os mesmos valores**.
 
 ### Desenvolvimento
 
@@ -259,15 +259,19 @@ The Receita also publishes an official **offline** calculator exposing the same 
 `http://localhost:8080/api`.
 
 ```bash
-make demo-offline    # downloads, starts the official offline engine, runs the demo
+make demo-offline    # downloads, starts the official offline engine, runs the demo, tears it down
 ```
 
-`offline-start` uses the official **Java 21** route, verbatim:
-`java -jar api-regime-geral.jar --spring.profiles.active=offline`. The official Docker
-route (`docker import ./calculadora.tar.gz calculadora:latest`, then `docker run … bash
-start.sh`) is documented in the PT-BR section above.
+Requires **Docker**. The official package contains no loose `.jar` — it ships
+`calculadora.tar.gz`, a container image with `api-regime-geral.jar` inside — so
+`offline-start` follows the Receita's own documented route (`docker import` +
+`docker run … bash start.sh`, per `linux/1-instalar.sh` and `linux/2-executar.sh` in the
+official package).
 
 In Python, `Calculator.offline()` targets `http://localhost:8080/api`.
+
+Both engines were checked side by side: for the demo cases they return **identical
+values**.
 
 ### Development
 

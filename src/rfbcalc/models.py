@@ -96,6 +96,13 @@ class ImpostoSeletivoInput(_Base):
     unidade: str | None = None
 
 
+class TributacaoRegularInput(_Base):
+    """Tributação regular applicable to a differentiated/benefited item."""
+
+    cst: str
+    cClassTrib: str
+
+
 class ItemOperacaoInput(_Base):
     numero: int
     cst: str
@@ -106,6 +113,7 @@ class ItemOperacaoInput(_Base):
     quantidade: Decimal | None = None
     unidade: str | None = None
     impostoSeletivo: ImpostoSeletivoInput | None = None
+    tributacaoRegular: TributacaoRegularInput | None = None
 
 
 class OperacaoInput(_Base):

@@ -44,41 +44,48 @@ build: install
 	$(BIN)/python -m build
 
 # --- official offline motor -------------------------------------------------
-# Downloads the official offline calculator and runs it locally. Requires Java 21+.
-# The offline motor serves the same API as the online one, on port 8080.
+# The official offline package (calculadora.zip) contains calculadora.tar.gz - a
+# container image - plus the Receita's own install scripts. There is no loose .jar
+# to run, so we follow the official Docker route:
+#     docker import ./calculadora.tar.gz calculadora-image
+#     docker run ... -w /calculadora calculadora-image bash start.sh
+# (see linux/1-instalar.sh and linux/2-executar.sh inside the official package).
+# We publish only 8080 (the API) and 8081; the official script also maps port 80 for
+# the web portal, which needs privileges we do not want to require for the demo.
 $(MOTOR)/.ready:
 	@mkdir -p $(MOTOR)
-	@echo ">> resolving official download URL"
+	@echo ">> resolving the official download URL"
 	@curl -fsSL "$(DL_API)" -o $(MOTOR)/url.json
-	@echo ">> downloading the official offline calculator (large file, please wait)"
+	@echo ">> downloading the official offline calculator (~250 MB, this takes a while)"
 	@curl -fSL "$$($(PY) -c 'import json;print(json.load(open("$(MOTOR)/url.json"))["downloadUrl"])')" \
 		-o $(MOTOR)/calculadora.zip
 	@echo ">> unpacking"
-	@cd $(MOTOR) && mkdir -p app && cd app && unzip -oq ../calculadora.zip
+	@cd $(MOTOR) && unzip -oq calculadora.zip calculadora.tar.gz
 	@touch $@
 
 offline-motor: $(MOTOR)/.ready      ## download + unpack the official offline calculator
 
 offline-start: offline-motor        ## start the official offline motor on :8080
-	@JAR="$$(find $(MOTOR)/app -name 'api-regime-geral.jar' | head -1)"; \
-	if [ -z "$$JAR" ]; then \
-	  echo "api-regime-geral.jar not found under $(MOTOR)/app."; \
-	  echo "See the Docker route in the README (README.md, 'Motor offline')."; exit 1; fi; \
-	command -v java >/dev/null || { echo "Java 21+ is required; see README."; exit 1; }; \
-	echo ">> starting $$JAR (official command: java -jar ... --spring.profiles.active=offline)"; \
-	java -jar "$$JAR" --spring.profiles.active=offline > $(MOTOR)/motor.log 2>&1 & \
-	echo $$! > $(MOTOR)/motor.pid; \
-	echo ">> waiting for http://localhost:8080/api"; \
-	for i in $$(seq 1 120); do \
+	@docker info >/dev/null 2>&1 || { \
+	  echo "Docker is required for the official offline calculator and is not running."; \
+	  echo "See README.md section 'Motor offline'."; exit 1; }
+	@docker image inspect calculadora-image >/dev/null 2>&1 || { \
+	  echo ">> importing the official image (docker import)"; \
+	  docker import $(MOTOR)/calculadora.tar.gz calculadora-image; }
+	@docker rm -f calculadora-container >/dev/null 2>&1 || true
+	@echo ">> starting the official offline motor"
+	@docker run -d --rm -p 8080:8080 -p 8081:8081 -w /calculadora \
+		--name calculadora-container calculadora-image bash start.sh >/dev/null
+	@echo ">> waiting for http://localhost:8080/api"
+	@for i in $$(seq 1 150); do \
 	  curl -fsS http://localhost:8080/api/calculadora/dados-abertos/versao >/dev/null 2>&1 && \
 	    { echo ">> motor up"; exit 0; }; \
 	  sleep 2; \
 	done; \
-	echo "motor did not come up; see $(MOTOR)/motor.log"; exit 1
+	echo "motor did not come up; logs: docker logs calculadora-container"; exit 1
 
 offline-stop:                       ## stop the local offline motor
-	@if [ -f $(MOTOR)/motor.pid ]; then kill "$$(cat $(MOTOR)/motor.pid)" 2>/dev/null; \
-	  unlink $(MOTOR)/motor.pid; echo ">> stopped"; else echo ">> not running"; fi
+	@docker rm -f calculadora-container >/dev/null 2>&1 && echo ">> stopped" || echo ">> not running"
 
 demo-offline: install offline-start  ## same demo, against the official OFFLINE motor
 	@$(BIN)/python -m rfbcalc.demo --offline; status=$$?; \
