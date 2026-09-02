@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rfbcalc"
+version = "0.1.0"
+description = "Python client for the official RFB CBS/IBS/Imposto Seletivo calculator (Reforma Tributaria, LC 214/2025)"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "Rafael D. Coelho", email = "rafael.d.cooelho@gmail.com" }]
+keywords = ["brazil", "tax", "cbs", "ibs", "imposto-seletivo", "reforma-tributaria", "receita-federal"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business :: Financial :: Accounting",
+]
+dependencies = ["httpx>=0.27", "pydantic>=2.7"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "respx>=0.21", "ruff>=0.6", "mypy>=1.11"]
+
+[project.urls]
+Homepage = "https://github.com/RAFAELDCOELHO/rfbcalc"
+Issues = "https://github.com/RAFAELDCOELHO/rfbcalc/issues"
+"Official calculator" = "https://piloto-cbs.tributos.gov.br/servico/calculadora-consumo/"
+
+[project.scripts]
+rfbcalc = "rfbcalc.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rfbcalc"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+# Don't reformat the Python snippets embedded in the README: their aligned comments
+# are documentation, not code under test.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "N"]
+
+[tool.ruff.lint.per-file-ignores]
+# models.py mirrors the official API's camelCase Portuguese names verbatim so every
+# attribute can be cross-referenced against the official OpenAPI document.
+"src/rfbcalc/models.py" = ["N802", "N815"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src/rfbcalc"]
+
+[[tool.mypy.overrides]]
+module = "respx.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["live: talks to the real official RFB motor (deselected by default in CI)"]
+addopts = "-m 'not live'"

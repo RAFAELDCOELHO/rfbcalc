@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "rfbcalc: Python client for the official RFB CBS/IBS/Imposto Seletivo calculator"
+abstract: >-
+  Unofficial, typed Python client for the Receita Federal do Brasil public
+  calculator for CBS, IBS and Imposto Seletivo (Reforma Tributaria do Consumo,
+  LC 214/2025). The library only transports data to and from the official
+  calculation engine; it implements no tax rule of its own.
+type: software
+authors:
+  - family-names: "Coelho"
+    given-names: "Rafael D."
+    email: "rafael.d.cooelho@gmail.com"
+repository-code: "https://github.com/RAFAELDCOELHO/rfbcalc"
+license: MIT
+version: "0.1.0"
+date-released: "2026-09-02"
+keywords:
+  - brazil
+  - taxation
+  - CBS
+  - IBS
+  - Imposto Seletivo
+  - reforma tributaria
+references:
+  - type: software
+    title: "Calculadora de Tributos sobre o Consumo (CBS/IBS/IS)"
+    authors:
+      - name: "Receita Federal do Brasil"
+    url: "https://piloto-cbs.tributos.gov.br/servico/calculadora-consumo/"
+    notes: "Official calculation engine wrapped by this client. Source of truth."
