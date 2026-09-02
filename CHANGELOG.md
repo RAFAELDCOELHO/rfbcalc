@@ -15,6 +15,8 @@ versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [0.1.0] - 2026-09-02
 
+Primeira publicação no PyPI: https://pypi.org/project/rfbcalc/0.1.0/
+
 ### Added
 - Cliente tipado (Pydantic v2, `Decimal`) para os endpoints oficiais
   `base-calculo/cbs-ibs-mercadorias`, `base-calculo/is-mercadorias`,

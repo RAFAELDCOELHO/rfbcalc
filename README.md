@@ -1,11 +1,12 @@
 # rfbcalc
 
 [![CI](https://github.com/RAFAELDCOELHO/rfbcalc/actions/workflows/ci.yml/badge.svg)](https://github.com/RAFAELDCOELHO/rfbcalc/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/RAFAELDCOELHO/rfbcalc/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/rfbcalc.svg)](https://pypi.org/project/rfbcalc/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 
 <p align="center">
-  <img src="docs/social-card.svg" width="100%" alt="rfbcalc — cliente Python tipado, não-oficial, da calculadora oficial da Receita Federal para CBS/IBS/IS (piloto-cbs)">
+  <img src="https://raw.githubusercontent.com/RAFAELDCOELHO/rfbcalc/main/docs/social-card.svg" width="100%" alt="rfbcalc — cliente Python tipado, não-oficial, da calculadora oficial da Receita Federal para CBS/IBS/IS (piloto-cbs)">
 </p>
 
 Typed Python client for the **official** Receita Federal do Brasil calculator for
@@ -46,7 +47,7 @@ O que a biblioteca **não** faz: calcular tributo. Todo número vem do motor ofi
 ### Instalação
 
 ```bash
-pip install rfbcalc          # a partir do PyPI (quando publicado)
+pip install rfbcalc          # a partir do PyPI
 pip install -e '.[dev]'      # a partir do repositório
 ```
 
@@ -132,10 +133,10 @@ make demo
 
 Um comando: cria o virtualenv, instala o pacote, chama o **motor oficial ao vivo** e
 compara cada valor, **até o centavo**, com um resultado oficial gravado em
-[`src/rfbcalc/fixtures/official_responses.json`](src/rfbcalc/fixtures/official_responses.json).
+[`src/rfbcalc/fixtures/official_responses.json`](https://github.com/RAFAELDCOELHO/rfbcalc/blob/main/src/rfbcalc/fixtures/official_responses.json).
 
 Esse arquivo **não foi escrito à mão**: ele é gravado verbatim do motor oficial por
-[`scripts/record_fixtures.py`](scripts/record_fixtures.py) (`make record-fixtures`) e
+[`scripts/record_fixtures.py`](https://github.com/RAFAELDCOELHO/rfbcalc/blob/main/scripts/record_fixtures.py) (`make record-fixtures`) e
 guarda a versão do motor e da base de referência usadas. Se a Receita mudar um valor,
 o `make demo` falha — que é exatamente o comportamento desejado.
 
@@ -192,7 +193,7 @@ Os testes de CI não acessam a rede: as respostas oficiais são reproduzidas com
 estar no ar, mas os números continuam sendo os oficiais.
 
 Release: atualize `__version__` em `src/rfbcalc/__init__.py` e o
-[`CHANGELOG.md`](CHANGELOG.md), crie a tag `vX.Y.Z` e faça push. O workflow
+[`CHANGELOG.md`](https://github.com/RAFAELDCOELHO/rfbcalc/blob/main/CHANGELOG.md), crie a tag `vX.Y.Z` e faça push. O workflow
 `release.yml` constrói e publica no PyPI (trusted publishing, sem token no repositório).
 
 ---
@@ -213,7 +214,7 @@ official engine.
 ### Install
 
 ```bash
-pip install rfbcalc          # from PyPI (once published)
+pip install rfbcalc          # from PyPI
 pip install -e '.[dev]'      # from a clone of this repository
 ```
 
@@ -291,9 +292,9 @@ make test-live   # exercise the real official engine
 
 ## Citation
 
-See [CITATION.cff](CITATION.cff).
+See [CITATION.cff](https://github.com/RAFAELDCOELHO/rfbcalc/blob/main/CITATION.cff).
 
 ## License
 
-MIT — see [LICENSE](LICENSE). The official calculator itself belongs to the
+MIT — see [LICENSE](https://github.com/RAFAELDCOELHO/rfbcalc/blob/main/LICENSE). The official calculator itself belongs to the
 Receita Federal do Brasil and is governed by its own terms.
