@@ -1,0 +1,256 @@
+{
+  "_README": "Recorded verbatim from the official RFB motor. DO NOT EDIT BY HAND. Regenerate with: make record-fixtures",
+  "recorded_at": "2026-09-02T12:15:29.887564+00:00",
+  "source": "https://piloto-cbs.tributos.gov.br/servico/calculadora-consumo/api",
+  "motor_version": {
+    "versaoApp": "1.3.1-0e46e51f",
+    "versaoDb": "V0043",
+    "descricaoVersaoDb": "Ajustes na vigência das tabelas CLASSIF_NBS_INDOP_LC e INDICADOR_OPERACAO_IBS_CBS.",
+    "dataVersaoDb": "2026-08-31",
+    "ambiente": "apr"
+  },
+  "cases": {
+    "base_calculo_cbs_ibs": {
+      "endpoint": "/calculadora/base-calculo/cbs-ibs-mercadorias",
+      "request": {
+        "anoFatoGerador": 2026,
+        "valorBem": "1000.00",
+        "icms": "180.00",
+        "pis": "16.50",
+        "cofins": "76.00",
+        "frete": "50.00",
+        "descontoIncondicional": "30.00"
+      },
+      "response": {
+        "baseCalculo": "747.50"
+      }
+    },
+    "base_calculo_is": {
+      "endpoint": "/calculadora/base-calculo/is-mercadorias",
+      "request": {
+        "anoFatoGerador": 2027,
+        "valorBem": "1000.00",
+        "icms": "180.00",
+        "freteCobrado": "50.00",
+        "descontoIncondicional": "30.00"
+      },
+      "response": {
+        "baseCalculo": "840.00"
+      }
+    },
+    "regime_geral_exemplo_oficial": {
+      "endpoint": "/calculadora/regime-geral",
+      "request": {
+        "id": "507f1f77bcf86cd799439011",
+        "versao": "1.0.0",
+        "dataHoraEmissao": "2027-01-01T03:00:00-03:00",
+        "municipio": 4314902,
+        "uf": "RS",
+        "itens": [
+          {
+            "numero": 1,
+            "ncm": "24021000",
+            "quantidade": 222,
+            "unidade": "VN",
+            "cst": "550",
+            "baseCalculo": 1111,
+            "cClassTrib": "550020",
+            "tributacaoRegular": {
+              "cst": "200",
+              "cClassTrib": "200032"
+            },
+            "impostoSeletivo": {
+              "cst": "000",
+              "baseCalculo": 1111,
+              "cClassTrib": "000001",
+              "unidade": "VN",
+              "quantidade": 222,
+              "impostoInformado": 0
+            }
+          }
+        ]
+      },
+      "response": {
+        "objetos": [
+          {
+            "nObj": 1,
+            "tribCalc": {
+              "IS": {
+                "CSTIS": "000",
+                "cClassTribIS": "000001",
+                "vBCIS": "1111.00",
+                "pIS": "13.00",
+                "pISEspec": "21.30",
+                "uTrib": "VN",
+                "qTrib": "222",
+                "vIS": "4873.03",
+                "memoriaCalculo": "Operação de consumo sujeita à tributação pelo Imposto Seletivo, com enquadramento legal em Art. 412, I, tributada conforme Tributação pelo Imposto Seletivo - Com Cálculo. A base de cálculo utilizada é de R$ 1111, com alíquota ad valorem de 13.000000%. A alíquota ad rem é de 21.3."
+              },
+              "IBSCBS": {
+                "CST": "550",
+                "cClassTrib": "550020",
+                "gIBSCBS": {
+                  "vBC": "5984.03",
+                  "gIBSUF": {
+                    "pIBSUF": "0.00",
+                    "vIBSUF": "0.00",
+                    "memoriaCalculo": "Operação de consumo com enquadramento legal em Art. 461, tributada conforme Suspensão. A base de cálculo utilizada é de R$ 5984.03000000, sendo que esta operação não possui alíquota."
+                  },
+                  "gIBSMun": {
+                    "pIBSMun": "0.00",
+                    "vIBSMun": "0.00",
+                    "memoriaCalculo": "Operação de consumo com enquadramento legal em Art. 461, tributada conforme Suspensão. A base de cálculo utilizada é de R$ 5984.03000000, sendo que esta operação não possui alíquota."
+                  },
+                  "vIBS": "0.00",
+                  "gCBS": {
+                    "pCBS": "0.00",
+                    "vCBS": "0.00",
+                    "memoriaCalculo": "Operação de consumo com enquadramento legal em Art. 461, tributada conforme Suspensão. A base de cálculo utilizada é de R$ 5984.03000000, sendo que esta operação não possui alíquota."
+                  },
+                  "gTribRegular": {
+                    "CSTReg": "200",
+                    "cClassTribReg": "200032",
+                    "pAliqEfetRegIBSUF": "0.02",
+                    "vTribRegIBSUF": "1.20",
+                    "pAliqEfetRegIBSMun": "0.02",
+                    "vTribRegIBSMun": "1.20",
+                    "pAliqEfetRegCBS": "3.36",
+                    "vTribRegCBS": "201.06"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "total": {
+          "tribCalc": {
+            "ISTot": {
+              "vIS": "4873.03"
+            },
+            "IBSCBSTot": {
+              "vBCIBSCBS": "5984.03",
+              "gIBS": {
+                "gIBSUF": {
+                  "vDif": "0.00",
+                  "vDevTrib": "0.00",
+                  "vIBSUF": "0.00"
+                },
+                "gIBSMun": {
+                  "vDif": "0.00",
+                  "vDevTrib": "0.00",
+                  "vIBSMun": "0.00"
+                },
+                "vIBS": "0.00",
+                "vCredPres": "0.00",
+                "vCredPresCondSus": "0.00"
+              },
+              "gCBS": {
+                "vDif": "0.00",
+                "vDevTrib": "0.00",
+                "vCBS": "0.00",
+                "vCredPres": "0.00",
+                "vCredPresCondSus": "0.00"
+              },
+              "gMono": {
+                "vIBSMono": "0.00",
+                "vCBSMono": "0.00",
+                "vIBSMonoReten": "0.00",
+                "vCBSMonoReten": "0.00",
+                "vIBSMonoRet": "0.00",
+                "vCBSMonoRet": "0.00"
+              }
+            }
+          }
+        }
+      }
+    },
+    "regime_geral": {
+      "endpoint": "/calculadora/regime-geral",
+      "request": {
+        "id": "rfbcalc-demo-001",
+        "versao": "1.0.0",
+        "dhFatoGerador": "2026-01-15T10:00:00-03:00",
+        "municipio": 3550308,
+        "itens": [
+          {
+            "numero": 1,
+            "cst": "000",
+            "cClassTrib": "000001",
+            "baseCalculo": "1000.00",
+            "quantidade": "1",
+            "unidade": "UN"
+          }
+        ]
+      },
+      "response": {
+        "objetos": [
+          {
+            "nObj": 1,
+            "tribCalc": {
+              "IBSCBS": {
+                "CST": "000",
+                "cClassTrib": "000001",
+                "gIBSCBS": {
+                  "vBC": "1000.00",
+                  "gIBSUF": {
+                    "pIBSUF": "0.10",
+                    "vIBSUF": "1.00",
+                    "memoriaCalculo": "Operação de consumo com enquadramento legal em LC 214/2025, tributada conforme Tributação integral. A base de cálculo utilizada é de R$ 1000.00000000, com alíquota de 0.100000%."
+                  },
+                  "gIBSMun": {
+                    "pIBSMun": "0.00",
+                    "vIBSMun": "0.00",
+                    "memoriaCalculo": "Operação de consumo com enquadramento legal em LC 214/2025, tributada conforme Tributação integral. A base de cálculo utilizada é de R$ 1000.00000000, com alíquota de 0.000000%."
+                  },
+                  "vIBS": "1.00",
+                  "gCBS": {
+                    "pCBS": "0.90",
+                    "vCBS": "9.00",
+                    "memoriaCalculo": "Operação de consumo com enquadramento legal em LC 214/2025, tributada conforme Tributação integral. A base de cálculo utilizada é de R$ 1000.00000000, com alíquota de 0.900000%."
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "total": {
+          "tribCalc": {
+            "IBSCBSTot": {
+              "vBCIBSCBS": "1000.00",
+              "gIBS": {
+                "gIBSUF": {
+                  "vDif": "0.00",
+                  "vDevTrib": "0.00",
+                  "vIBSUF": "1.00"
+                },
+                "gIBSMun": {
+                  "vDif": "0.00",
+                  "vDevTrib": "0.00",
+                  "vIBSMun": "0.00"
+                },
+                "vIBS": "1.00",
+                "vCredPres": "0.00",
+                "vCredPresCondSus": "0.00"
+              },
+              "gCBS": {
+                "vDif": "0.00",
+                "vDevTrib": "0.00",
+                "vCBS": "9.00",
+                "vCredPres": "0.00",
+                "vCredPresCondSus": "0.00"
+              },
+              "gMono": {
+                "vIBSMono": "0.00",
+                "vCBSMono": "0.00",
+                "vIBSMonoReten": "0.00",
+                "vCBSMonoReten": "0.00",
+                "vIBSMonoRet": "0.00",
+                "vCBSMonoRet": "0.00"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
