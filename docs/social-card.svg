@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="t d">
+  <title id="t">rfbcalc</title>
+  <desc id="d">Unofficial typed Python client for the official Receita Federal CBS/IBS/IS calculator (piloto-cbs)</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1a2b"/>
+      <stop offset="1" stop-color="#12304a"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.05"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#grid)"/>
+  <rect x="0" y="0" width="14" height="640" fill="#2ecc71"/>
+  <rect x="14" y="0" width="6" height="640" fill="#f1c40f"/>
+
+  <g font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#ffffff">
+    <text x="96" y="130" font-size="28" font-weight="600" fill="#9fb3c8" letter-spacing="6">PYTHON · PYDANTIC V2 · DECIMAL</text>
+    <text x="96" y="260" font-size="132" font-weight="700" letter-spacing="-3">rfbcalc</text>
+    <text x="96" y="330" font-size="34" font-weight="500" fill="#dbe7f3">Cliente Python tipado, não-oficial, da calculadora oficial</text>
+    <text x="96" y="376" font-size="34" font-weight="500" fill="#dbe7f3">da Receita Federal para CBS · IBS · Imposto Seletivo</text>
+    <text x="96" y="440" font-size="26" fill="#9fb3c8">Unofficial typed Python client for the official RFB CBS/IBS/IS calculator (piloto-cbs)</text>
+
+    <g transform="translate(96 500)">
+      <rect width="360" height="52" rx="26" fill="#f1c40f" fill-opacity="0.14" stroke="#f1c40f" stroke-opacity="0.7"/>
+      <text x="180" y="34" font-size="21" font-weight="600" text-anchor="middle" fill="#f1c40f">NÃO OFICIAL · UNOFFICIAL</text>
+    </g>
+    <g transform="translate(476 500)">
+      <rect width="690" height="52" rx="26" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.25"/>
+      <text x="345" y="34" font-size="20" text-anchor="middle" fill="#dbe7f3">Nenhuma alíquota implementada aqui · O motor oficial é a fonte da verdade</text>
+    </g>
+
+    <text x="1184" y="600" font-size="22" text-anchor="end" fill="#9fb3c8">github.com/RAFAELDCOELHO/rfbcalc</text>
+  </g>
+</svg>

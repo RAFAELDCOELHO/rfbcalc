@@ -4,6 +4,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 
+<p align="center">
+  <img src="docs/social-card.svg" width="100%" alt="rfbcalc — cliente Python tipado, não-oficial, da calculadora oficial da Receita Federal para CBS/IBS/IS (piloto-cbs)">
+</p>
+
 Typed Python client for the **official** Receita Federal do Brasil calculator for
 **CBS**, **IBS** and **Imposto Seletivo** (Reforma Tributária do Consumo, LC 214/2025).
 
